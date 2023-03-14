@@ -2,7 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const db = require("./utils/database");
-const reletedModels = require("./models/initModels");
+const reletedModels = require("./models/relatedModels");
+const userRoutes = require("./routes/user.routes");
+const taskRoutes = require("./routes/task.routes");
+
+
+
 
 
 reletedModels();
@@ -31,14 +36,19 @@ db.authenticate()
 // ! force: true --> elimino toda la estructura de la db
 // ! y la crea nuevamente
 
-db.sync( {force: true}) // alterar los atributos
+db.sync({ force: true }) // alterar los atributos
   .then(() => console.log("Base de datos sync"))
   .catch((error) => console.log(error));
+
+  app.use(userRoutes);
+  
+  app.use(taskRoutes);
 
 
 app.get("/", (req, res) => {
   res.send("welcome to my API");
 });
+
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
